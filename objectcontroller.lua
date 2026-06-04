@@ -37,3 +37,9 @@ hold_can_drag = function(Obj)
   end
 end
 
+drag_and_snap = function(Obj, Area, delta)
+  if util.rect_overlap(Obj, Area) then
+    Obj.x = util.approach(Obj.x, Area.x+8, delta*240)
+    Obj.y = util.approach(Obj.y, Area.y+4, delta*240)
+  end
+end

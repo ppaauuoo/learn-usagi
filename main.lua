@@ -18,8 +18,12 @@ function _init()
 end
 
 function _update(dt)
-  update_holding(Box)
+  -- interactive effect
   shake_when_hold(2,0.01,0.1)
+
+  -- box interactive
+  update_holding(Box)
+  drag_and_snap(Box, Area, dt)
   hold_can_drag(Box)
 end
 
@@ -33,5 +37,5 @@ end
 function _draw(dt)
   gfx.clear(gfx.COLOR_BLACK)
   text_box(Box, gfx.COLOR_WHITE)
-  text_box(Area, gfx.COLOR_WHITE)
+  text_box(Area, gfx.COLOR_RED)
 end
