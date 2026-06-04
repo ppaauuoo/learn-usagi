@@ -21,12 +21,12 @@ shake_when_hold = function(intensity, velocity, aftereffect)
       State.held_time += velocity
     end
     effect.screen_shake(0.3,State.held_time)
-  else
-    if State.held_time and State.held_time > 0 then
-      State.held_time -= aftereffect
-    end
-    effect.screen_shake(0.3,State.held_time)
+    return
   end
+  if State.held_time > 0 then
+    State.held_time -= aftereffect
+  end
+  effect.screen_shake(0.3,State.held_time)
 end
 
 hold_can_drag = function(Obj)
@@ -35,12 +35,11 @@ hold_can_drag = function(Obj)
     Obj.x = x-Obj.w/2
     Obj.y = y-5
   end
-  if State.held_time >= 0 then
-    print('hello')
 end
 
 drag_and_snap = function(Obj, Area, delta)
   if util.rect_overlap(Obj, Area) then
+    shake_when_hold(2,0.1,0.1)
     Obj.x = util.approach(Obj.x, Area.x+8, delta*360)
     Obj.y = util.approach(Obj.y, Area.y+4, delta*360)
   end

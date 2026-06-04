@@ -15,15 +15,17 @@ function _init()
   State = {held_time=0, holding=false}
   Box = {text=text, x=10,y=10,w=w+10,h=h+5}
   Area = {x=40, y=40, w=Box.w*1.5, h=Box.h*1.5}
+  Area2 = {x=80, y=80, w=Box.w*1.5, h=Box.h*1.5}
 end
 
 function _update(dt)
   -- interactive effect
-  shake_when_hold(2,0.01,0.1)
+  -- shake_when_hold(2,0.01,0.1)
 
   -- box interactive
   update_holding(Box)
   drag_and_snap(Box, Area, dt)
+  drag_and_snap(Box, Area2, dt)
   hold_can_drag(Box)
 end
 
@@ -38,4 +40,5 @@ function _draw(dt)
   gfx.clear(gfx.COLOR_BLACK)
   text_box(Box, gfx.COLOR_WHITE)
   text_box(Area, gfx.COLOR_RED)
+  text_box(Area2, gfx.COLOR_GREEN)
 end
