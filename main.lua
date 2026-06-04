@@ -1,44 +1,37 @@
+
+require("objectcontroller")
+
 function _config()
-  return { name = "test", game_id = "com.usagiengine.YOURGAMENAME" }
+  return { name = "test", game_id = "com.usagiengine.test" }
 end
+
 
 function _init()
   -- Live reload preserves globals across saved edits but resets locals.
   -- Stash mutable game state in a capitalized global like `State` so it
   -- survives reloads; F5 calls _init again to reset.
-  State = {held_time=0}
-  Box = {x=10,y=10,w=90,h=15}
-end
-
-function hover_box(x, y)
-  if x >= Box.x and x <= Box.x+Box.w and
-    y >= Box.y and y <= Box.y+Box.h then
-    return true
-  end
-  return false
-end
-
-function hold_shake(intensity, velocity, aftereffect)
-  x,y = input.mouse()
-  if input.mouse_held(input.MOUSE_LEFT) and hover_box(x,y) then
-    if State.held_time <= intensity then
-      State.held_time += velocity
-    end
-    effect.screen_shake(0.3,State.held_time)
-  else
-    if State.held_time and State.held_time > 0 then
-      State.held_time -= aftereffect
-    end
-    effect.screen_shake(0.3,State.held_time)
-  end
+  text = "Hold"
+  w, h = usagi.measure_text(text)
+  State = {held_time=0, holding=false}
+  Box = {text=text, x=10,y=10,w=w+10,h=h+5}
+  Area = {x=40, y=40, w=Box.w*1.5, h=Box.h*1.5}
 end
 
 function _update(dt)
-  hold_shake(2,0.01,0.1)
+  update_holding(Box)
+  shake_when_hold(2,0.01,0.1)
+  hold_can_drag(Box)
+end
+
+function text_box(Box, color)
+  gfx.rect(Box.x, Box.y, Box.w, Box.h, color)
+  if Box.text then
+    gfx.text(Box.text, Box.x+5, Box.y, color)
+  end
 end
 
 function _draw(dt)
   gfx.clear(gfx.COLOR_BLACK)
-  gfx.rect(Box.x, Box.y, Box.w, Box.h, gfx.COLOR_WHITE)
-  gfx.text("Hold this", 15, 10, gfx.COLOR_WHITE)
+  text_box(Box, gfx.COLOR_WHITE)
+  text_box(Area, gfx.COLOR_WHITE)
 end
